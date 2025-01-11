@@ -1,0 +1,21 @@
+?start: assignment_list
+assignment_list: assignment (";" assignment)*
+assignment: "{" fact_list "}" ":" FLOAT "."
+fact_list: fact ("," fact)*
+?fact: atom ("(" argument_list ")")?
+argument_list: fact ("," fact)*
+
+atom: NAME | INT
+
+NAME: LETTER (LETTER_OR_DIGIT)*
+INT: DIGIT+
+
+FLOAT: DIGIT+ ("." DIGIT+)?
+
+LETTER: /[a-zA-Z]/
+DIGIT: /[0-9]/
+LETTER_OR_DIGIT: LETTER|DIGIT
+
+%ignore " "
+%ignore "\t"
+%ignore "\n"
