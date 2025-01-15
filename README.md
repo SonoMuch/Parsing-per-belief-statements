@@ -55,6 +55,31 @@ Descrizione:
   %ignore " "
   %ignore "\\t"
   %ignore "\\n"
+  
+## Funzionalità dei singoli file
+#### **`file_processor.py`**
+- Legge i file input, normalizza le righe, effettua il parsing, trasforma i risultati in fatti probabilistici e regole ASP. Salva l'output in output.txt
+
+#### **`belief_parser.py`**
+-  Definisce la logica per il parsing delle righe di input usando la grammatica definita in **`grammar.lark`**. Converte i segmenti validi in oggetti Python come **`assignment`** e **`fact`**
+ 
+#### **`transformer_module.py`**
+- Implementa la logica per trasformare gli oggetti **`assignment`** in fatti probabilistici e regole ASP. Gestisce calcoli di probabilità condizionali e genera output conforme alla sintassi ASP.
+
+#### **`assignment.py`**
+- Rappresenta un singolo assegnamento probabilistico. Include metodi per validare e rappresentare l'assegnamento in diversi formati.
+
+#### **`assignment_list.py`**
+- Gestisce una lista di assegnamenti. Fornisce metodi per verificare se la lista è vuota e per iterare sugli assegnamenti.
+
+#### **`fact.py`**
+- Definisce la struttura di un fatto, con supporto per fatti semplici e composti. Include metodi per la rappresentazione testuale e normalizzata.
+
+#### **`parser_module.py`**
+- Contiene funzioni di supporto per il parsing e la trasformazione dei dati. Agisce come intermediario tra il parsing e la trasformazione in ASP.
+
+#### **`main.py`**
+- Punto di ingresso del programma. Inizializza il **`FileProcessor`** e avvia il processo di elaborazione dei file di input e output.
 
 ## Esempio di parsing
  - Per l'input **`{red}:0.3`**, la grammatica produce il seguente albero sintattico:
