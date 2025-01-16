@@ -1,7 +1,7 @@
-from lark import Transformer  # Importa Transformer da Lark per creare trasformazioni personalizzate.
-from model import Fact, Assignment, AssignmentList  # Importa le classi utilizzate nelle trasformazioni.
+from lark import Transformer 
+from model import Fact, Assignment, AssignmentList 
 
-#trasforma alberi in oggetti
+
 class AssignmentTransformer(Transformer):
 
 
