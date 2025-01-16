@@ -25,31 +25,24 @@ Descrizione:
 - **`start`**: Punto di ingresso principale della grammatica.
   ```
   ?start: assignment_list
-
 - **`assignment_list`**: Una lista di assegnamenti separati da **`;`**.
   ```
   assignment_list: assignment (";" assignment)*
-
 - **`assignment`**: Un singolo assegnamento con una lista di fatti e un valore di probabilità.
   ```
   assignment: "{" fact_list "}" ":" FLOAT
-
 - **`fact_list`**: Una lista di fatti separati da **`,`**.
   ```
   fact_list: fact ("," fact)*
-
 - **`fact`**:  Un fatto che può essere semplice o con argomenti.
   ```
   ?fact: atom ("(" argument_list ")")?
-
 - **`atom`**:  Un identificatore che rappresenta un nome o un numero intero.
   ```
   atom: NAME | INT
-
 - **`FLOAT`**: Un numero decimale che rappresenta un valore di probabilità compreso tra 0 e 1.
   ```
   FLOAT: DIGIT+ ("." DIGIT+)?
-
 - Regole di Ignoranza: La grammatica ignora spazi, tabulazioni e nuove righe.
   ```
   %ignore " "
