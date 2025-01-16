@@ -1,7 +1,7 @@
 
-from lark import Lark  # Importa Lark per gestire la sintassi della grammatica.
-from model import Fact, Assignment, AssignmentList  # Importa le classi necessarie per rappresentare i dati parseati.
-from .assignment_transformer import AssignmentTransformer  # Importa il trasformatore per convertire gli alberi sintattici.
+from lark import Lark
+from model import Fact, Assignment, AssignmentList
+from .assignment_transformer import AssignmentTransformer 
 
 class BeliefParser:
 
