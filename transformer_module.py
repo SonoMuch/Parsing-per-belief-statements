@@ -1,5 +1,5 @@
 from model import Fact
-
+import math
 def facts_name(facts): #trasforma assegnamenti in fatti
     for f in facts:
         if not isinstance(f, Fact):
@@ -18,51 +18,66 @@ class ASPTransformer:
         facts = []
 
         for assignment in assignments:
-            if self.remaining_probability <= 0: #P <0
+            if self.remaining_probability <= 0:  # Probabilità residua <= 0
                 facts.append("% Errore: la probabilità residua è zero o negativa.")
                 return facts
 
             probability = assignment.probability / self.remaining_probability
             fact_name = facts_name(assignment.facts)
 
-            if probability > 1:  #P>1
+            # Debug per verificare i valori
+            print(
+                f"DEBUG: assignment.probability={assignment.probability}, probability={probability}, fact_name={fact_name}")
+
+            if probability > 1:  # Probabilità calcolata > 1
                 facts.append(
                     f"% Errore: la probabilità calcolata non è valida perché >1."
                 )
                 self.remaining_probability = 0
                 return facts
 
-            if assignment.probability > 0:
+            if 0 < probability < 1 and not math.isclose(probability, 1, abs_tol=1e-9):
                 facts.append(f"{probability:.9f}::{fact_name}f.")
 
-            self.remaining_probability -= assignment.probability
+            if assignment.probability < self.remaining_probability:
+                self.remaining_probability -= assignment.probability
+            elif assignment.probability == self.remaining_probability:
+                self.remaining_probability = 0
 
         return facts
 
     def transform_to_rules(self, assignments):
-
         rules = []  # Lista per regole generate
         fact_names = [facts_name(a.facts) for a in assignments if a.probability > 0]
 
-        for i, assignment in enumerate(assignments[:-1]): #tutti tranne l'ultimo
+        for i, assignment in enumerate(assignments[:-1]):  # Tutti tranne l'ultimo
             if assignment.probability == 0:
                 continue
             current_fact = fact_names[i]
             preconditions = [f"not {fn}f" for fn in fact_names[:i]]
             rule = f"{current_fact}:- {', '.join(preconditions)}, {current_fact}f." if preconditions else f"{current_fact}:- {current_fact}f."
-            rules.append(rule)
 
-        last_fact = fact_names[-1]  #ultimo fatto
+
+            if len(assignment.facts) <= 2 or current_fact not in rule.split(":- ")[1]:
+                rules.append(rule)
+
+
+            if len(assignment.facts) == 2:
+                combined_facts = ";".join(fact.to_normalized_str() for fact in assignment.facts)
+                rules.append(f"{combined_facts} :- {current_fact}.")
+
+        last_fact = fact_names[-1]  # Ultimo fatto
         preconditions = [f"not {fn}f" for fn in fact_names[:-1]]
         combined_rule = f"{last_fact}:- {', '.join(preconditions)}." if preconditions else f"{last_fact}:- {last_fact}f."
         rules.append(combined_rule)
 
-        combined_facts = ";".join(last_fact.split("_"))  #combina regole e fatti
+
+        combined_facts = ";".join(last_fact.split("_"))
         rules.append(f"{combined_facts}:- {last_fact}.")
 
         return rules
 
-    def transform(self, assignment_list): #Combina per un unico output
+    def transform(self, assignment_list):
         assignments = assignment_list.assignments
         facts = self.transform_to_facts(assignments)
         rules = self.transform_to_rules(assignments)
