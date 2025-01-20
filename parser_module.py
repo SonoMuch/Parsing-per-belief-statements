@@ -1,9 +1,9 @@
-from lark import Lark, Transformer  # Importa Lark per la definizione della grammatica e Transformer per la trasformazione dell'albero.
-from model import Fact, Assignment, AssignmentList  # Importa i modelli utilizzati per rappresentare i dati parseati.
+from lark import Lark, Transformer
+from model import Fact, Assignment, AssignmentList
 
-class AssignmentTransformer(Transformer): #trasforma albero sintattico in oggetti py
+class AssignmentTransformer(Transformer):
 
-    def FLOAT(self, v):
+    def FLOAT(self, v): #conversioni
         return float(v)
 
     def NAME(self, v):
@@ -30,7 +30,6 @@ class AssignmentTransformer(Transformer): #trasforma albero sintattico in oggett
         return AssignmentList(items)
 
 class BeliefParser: #analisi input con lark
-
     def __init__(self):
         with open("grammar.lark", "r", encoding="utf-8") as f:
             grammar = f.read()

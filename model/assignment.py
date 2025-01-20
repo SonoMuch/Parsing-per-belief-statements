@@ -3,7 +3,6 @@ class Assignment:
 
 
     def __init__(self, facts, probability):
-
         self.facts = facts
         self.probability = probability
 

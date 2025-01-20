@@ -3,8 +3,6 @@ from model import Fact, Assignment, AssignmentList
 
 
 class AssignmentTransformer(Transformer):
-
-
     def FLOAT(self, v):
 
         try:
@@ -17,13 +15,13 @@ class AssignmentTransformer(Transformer):
             print(f"DEBUG: Invalid FLOAT value: {v}") #Utilizzato per verificare errori
             return None
 
-    def NAME(self, v):
+    def NAME(self, v): #convesione in stringa
         return str(v)
 
     def INT(self, v):
         return str(v)
 
-    def atom(self, items):
+    def atom(self, items): #elemento 1
         return items[0]
 
     def fact(self, items):
@@ -41,7 +39,7 @@ class AssignmentTransformer(Transformer):
         return [self.fact([item]) if isinstance(item, str) else item for item in items]
 
     def assignment(self, items): #trasforma assegnamento
-        return Assignment(items[0], items[1])  #crea oggetto assignment
+        return Assignment(items[0], items[1])
 
     def assignment_list(self, items): #raccolta lista di assegnamenti
         return AssignmentList(items)

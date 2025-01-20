@@ -1,21 +1,21 @@
 from model import Fact
 
-def facts_name(facts): #traforma gli assegnamenti probabilistici in fatti e regole ASP
-    for f in facts:  # Verifica che ogni elemento della lista sia un oggetto Fact
+def facts_name(facts): #trasforma assegnamenti in fatti
+    for f in facts:
         if not isinstance(f, Fact):
-            raise TypeError(f"Expected Fact, got {type(f)}: {f}")  # Solleva un'eccezione per tipi non validi
-        print("DEBUG: Fact in facts_name =", f)  # Debug per verificare eventuali errori nei fatti
-    return "_".join(f.to_normalized_str() for f in facts)  # Restituisce i fatti concatenati in formato normalizzato
+            raise TypeError(f"Expected Fact, got {type(f)}: {f}")
+        print("DEBUG: Fact in facts_name =", f)  # check errori
+    return "_".join(f.to_normalized_str() for f in facts)
 
-class ASPTransformer: # Classe per trasformare assegnamenti probabilistici in fatti e regole ASP
+class ASPTransformer:
 
 
     def __init__(self):
         self.remaining_probability = 1.0
 
-    def transform_to_facts(self, assignments): #genera fatti probabilistici
+    def transform_to_facts(self, assignments):
         self.remaining_probability = 1.0
-        facts = []  # Lista per fatti generati
+        facts = []
 
         for assignment in assignments:
             if self.remaining_probability <= 0: #P <0
@@ -39,7 +39,7 @@ class ASPTransformer: # Classe per trasformare assegnamenti probabilistici in fa
 
         return facts
 
-    def transform_to_rules(self, assignments): # Genera regole ASP per i fatti derivati e le condizioni associate
+    def transform_to_rules(self, assignments):
 
         rules = []  # Lista per regole generate
         fact_names = [facts_name(a.facts) for a in assignments if a.probability > 0]

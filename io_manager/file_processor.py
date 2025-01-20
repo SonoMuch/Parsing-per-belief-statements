@@ -5,8 +5,8 @@ from model import AssignmentList
 class FileProcessor:
 
     def __init__(self, input_file="input.txt", output_file="output.txt"): #costruttore
-        self.input_file = input_file #input
-        self.output_file = output_file  #output
+        self.input_file = input_file
+        self.output_file = output_file
         self.parser = BeliefParser()
         self.asp_transformer = ASPTransformer()
 
@@ -16,7 +16,7 @@ class FileProcessor:
 
         with open(self.input_file, "r", encoding="utf-8") as fin: #lettura file
             for idx, line in enumerate(fin, start=1):
-                original_line = line.strip().replace(' ', '')  #elimina soazi
+                original_line = line.strip().replace(' ', '')  #elimina spazi
                 if not original_line:
                     continue
 
@@ -26,7 +26,7 @@ class FileProcessor:
 
                 assignment_list, invalid_segments = self.parser.parse_line(original_line)
 
-                results.append(f"Output riga {idx}:")
+                results.append(f"Output riga {idx}:") #Output riga n
 
                 if assignment_list and not assignment_list.is_empty(): #trasforma i risultati
                     transformed_lines = self.asp_transformer.transform(assignment_list)

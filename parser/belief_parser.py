@@ -6,18 +6,16 @@ from .assignment_transformer import AssignmentTransformer
 class BeliefParser:
 
     def __init__(self):
-
         with open("grammar.lark", "r", encoding="utf-8") as f: #carica grammatica
             grammar = f.read()
         self.parser = Lark(grammar, parser='lalr', maybe_placeholders=False, transformer=AssignmentTransformer())
-
 
     def parse_line(self, line):
         try:
             print(f"DEBUG: Processing line: {line}")  #Debug usati per verificare errori
             assignments = line.split(";")
-            valid_assignments = []  # Lista per assegnamenti validi.
-            invalid_segments = []  # Lista per segmenti non validi.
+            valid_assignments = []
+            invalid_segments = []
 
             for assignment in assignments:
                 assignment = assignment.strip()
