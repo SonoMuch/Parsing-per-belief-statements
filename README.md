@@ -1,126 +1,124 @@
-# Parsing per belief statements
+# Parsing for Belief Statements
 
-## Descrizione del Progetto
+## Project Description
 
-Questo progetto si occupa del parsing e della trasformazione di assegnamenti probabilistici in formato ASP. Ha l'obiettivo di elaborare un input che contiene assegnamenti probabilistici, verificarne la correttezza sintattica, che rispetti il formato, e infine trasformarlo in un formato ASP. 
+This project focuses on the parsing and transformation of probabilistic assignments into ASP format. The goal is to process an input containing probabilistic assignments, verify its syntactic correctness according to a predefined format, and finally transform it into an ASP-compliant format.
 
- - **Parsing**: Per parsing intendiamo un processo di analisi e scomposizione di un input, in una struttura organizzata, seguendo regole precise definite da una grammatica. Nel caso in oggetto è stato scelto Lark.
- - **Lark**: Libreria python progettata per creare parser. Permette di trasformare l'albero sintattico (struttura organizzata) in oggetti python, mediante strumenti che permettono di definire grammatiche.
- - **ASP**: Il parsing in ASP traduce il programma in una rappresentazione interna per il solver ASP che utilizza per calcolare gli answer set
- - **Answer set**: Soluzioni che soddisfano le regole e i vincoli del programma
+- **Parsing**: Parsing refers to the process of analyzing and breaking down an input into an organized structure following precise rules defined by a grammar. In this project, the Lark library is used.
+- **Lark**: A Python library designed to create parsers. It allows transforming the syntax tree (organized structure) into Python objects through tools for defining grammars.
+- **ASP**: Parsing into ASP translates the program into an internal representation for the ASP solver, which is used to compute the answer sets.
+- **Answer set**: Solutions that satisfy the rules and constraints of the program.
 
-### Tecnologie Utilizzate
-- **Lark**: Per la definizione della grammatica e il parsing dell' input.
-- **Moduli Personalizzati**: Implementano trasformazione, gestione degli assegnamenti, e la logica ASP.
-- **Python**: Linguaggio utilizzato per sviluppare il progetto.
+### Technologies Used
+- **Lark**: For grammar definition and input parsing.
+- **Custom Modules**: For transformations, assignment handling, and ASP logic.
+- **Python**: Programming language used to develop the project.
 
 ---
 
-## Struttura del File `grammar.lark`
+## `grammar.lark` File Structure
 
-Il file `grammar.lark` definisce la grammatica utilizzata per il parsing degli assegnamenti probabilistici. 
-Descrizione:
+The `grammar.lark` file defines the grammar used for parsing probabilistic assignments. 
+Details:
 
-### Regole Principali
-- **`start`**: Punto di ingresso principale della grammatica.
+### Main Rules
+- **`start`**: The main entry point of the grammar.
   ```
   ?start: assignment_list
-- **`assignment_list`**: Una lista di assegnamenti separati da **`;`**.
+- **`assignment_list`**: A list of assignments separated by **`;`**.
   ```
   assignment_list: assignment (";" assignment)*
-- **`assignment`**: Un singolo assegnamento con una lista di fatti e un valore di probabilità.
+- **`assignment`**: A single assignment with a list of facts and a probability value.
   ```
   assignment: "{" fact_list "}" ":" FLOAT
-- **`fact_list`**: Una lista di fatti separati da **`,`**.
+- **`fact_list`**: A list of facts separated by **`,`**.
   ```
   fact_list: fact ("," fact)*
-- **`fact`**:  Un fatto che può essere semplice o con argomenti.
+- **`fact`**:  A fact that can be simple or with arguments.
   ```
   ?fact: atom ("(" argument_list ")")?
-- **`atom`**:  Un identificatore che rappresenta un nome o un numero intero.
+- **`atom`**:  An identifier representing a name or an integer.
   ```
   atom: NAME | INT
-- **`FLOAT`**: Un numero decimale che rappresenta un valore di probabilità compreso tra 0 e 1.
+- **`FLOAT`**: A decimal number representing a probability value between 0 and 1.
   ```
   FLOAT: DIGIT+ ("." DIGIT+)?
-- Regole di Ignoranza: La grammatica ignora spazi, tabulazioni e nuove righe.
+- Ignored rules: The grammar ignores spaces, tabs, and newlines.
   ```
   %ignore " "
   %ignore "\\t"
-  %ignore "\\n"
-  
-## Funzionalità dei singoli file
+  %ignore "\\n"  
+## File Functionalities
 #### **`file_processor.py`**
-- Legge i file input, normalizza le righe, effettua il parsing, trasforma i risultati in fatti probabilistici e regole ASP. Salva l'output in output.txt
+- Reads input files, normalizes the lines, parses them, transforms the results into probabilistic facts and ASP rules, and saves the output to `output.txt`.
 
 #### **`belief_parser.py`**
--  Definisce la logica per il parsing usando la grammatica definita in **`grammar.lark`**. Converte i segmenti validi in oggetti Python come **`assignment`** e **`fact`**
- 
+- Defines the logic for parsing using the grammar specified in **`grammar.lark`**. Converts valid segments into Python objects like **`assignment`** and **`fact`**.
+
 #### **`transformer_module.py`**
-- Implementa la logica per trasformare gli oggetti **`assignment`** in fatti probabilistici e regole ASP. Gestisce calcoli di probabilità condizionali e genera output che segue la sintassi ASP.
+- Implements the logic for transforming **`assignment`** objects into probabilistic facts and ASP rules. Manages conditional probability calculations and generates output following ASP syntax.
 
 #### **`assignment.py`**
-- Rappresenta un singolo assegnamento probabilistico e comprende metodi per validare e rappresentare l'assegnamento.
+- Represents a single probabilistic assignment and includes methods for validating and representing the assignment.
 
 #### **`assignment_list.py`**
-- Gestisce una lista di assegnamenti. Fornisce metodi per verificare se la lista è vuota e per iterare sugli assegnamenti.
+- Manages a list of assignments. Provides methods to check if the list is empty and to iterate over the assignments.
 
 #### **`fact.py`**
-- Definisce la struttura di un fatto, con supporto per fatti semplici e composti. Include metodi per la rappresentazione testuale e normalizzata.
+- Defines the structure of a fact, supporting both simple and composite facts. Includes methods for textual and normalized representation.
 
 #### **`parser_module.py`**
-- Contiene funzioni di supporto per il parsing e la trasformazione dei dati. Fa l'intermediario fra il parsing e le trasformazioni ASP.
+- Contains helper functions for parsing and data transformation. Acts as an intermediary between parsing and ASP transformations.
 
 #### **`main.py`**
-- Punto di ingresso del programma. Inizializza il **`FileProcessor`** e avvia il processo di elaborazione dei file di input e output.
+- The program's entry point. Initializes the **`FileProcessor`** and starts the process of handling input and output files.
 
-  ---
+---
 
-## Esempio di parsing
- - Per l'input **`{red}:0.3`**, la grammatica produce il seguente albero sintattico:
+## Parsing Example
+- For the input **`{red}:0.3`**, the grammar produces the following syntax tree:
+  ```plaintext
+  assignment_list
+    assignment
+      fact_list
+        fact
+          atom: "red"
+      FLOAT: "0.3"
   ```
- assignment_list
-  assignment
-    fact_list
-      fact
-        atom: "red"
-    FLOAT: "0.3"
 
-
-```
-
-## Processo Dettagliato 
-#### Input di esempio
+## Detailed Process 
+#### Example Input
 ``` {red}:0.3 ; {blue}:0.1 ; {blue,yellow}:0.6. ```
 
-### Passo 1:
-#### File Coinvolto: **`file_processor.py`**
- 1. L'input viene letto e vengono rimossi gli spazi superflui
- 2. Controllo che l'input termini con **`.`**
+### Step 1:
+#### File Involved: **`file_processor.py`**
+1. The input is read, and unnecessary spaces are removed.
+2. The input is checked to ensure it ends with **`.`**.
 
-### Passo 2:
-#### File Coinvolti:
- - **`belief_parser.py`**
- - **`grammar.lark`**
+### Step 2:
+#### Files Involved:
+- **`belief_parser.py`**
+- **`grammar.lark`**
 
-1. L'input viene diviso in assegnamenti separtai da **`;`**
-2. Gli assegnamenti vengono analizzati da una grammatica specifica che viene definita in **`grammar.lark`**
-3. Vengono identificati i segmenti validi e trasformati in oggetti python (es . **`fact`**)
-4. Infine, vengono registrati gli errori sintattici
+1. The input is split into assignments separated by **`;`**.
+2. The assignments are analyzed using a specific grammar defined in **`grammar.lark`**.
+3. Valid segments are identified and transformed into Python objects (e.g., **`fact`**).
+4. Syntax errors are recorded.
 
-#### Output Intermentio:
+#### Intermediate Output:
  ```
-Segmenti validi:
+Valid segments:
 - {red}:0.3
 - {blue}:0.1
 - {blue,yellow}:0.6
 
-Nessun segmento non valido.
+No invalid segments found.
   ```
 
-### Passo 3: Trasformazione in fatti probabilistici
-#### File coinvolto: **`transformer_module.py`**
- 1. Ogni singolo assegnamento, se valido, viene trasformato in un fatto probabilistico, con successivo calcolo della probabilità condizionale
+### Step 3: Transformation into Probabilistic Facts
+#### File Involved: **`transformer_module.py`**
+1. Each valid assignment is transformed into a probabilistic fact, with conditional probability calculations:
+   
 - **`{red}:0.3`**:
   ```
    0.3 / 1.0 = 0.300000000
@@ -133,23 +131,23 @@ Nessun segmento non valido.
   ```
    0.6 / (1 - 0.3 - 0.1) = 1.000000000
   ```
-2. Vengono generati i fatti probabilistici
+2. Probabilistic facts are generated:
 ```
   0.300000000::redf.
   0.142857143::bluef.
   1.000000000::blue_yellowf.
 ```
-#### Output Intermedio:
+#### Intermediate Output:
 ```
 0.300000000::redf.
 0.142857143::bluef.
 1.000000000::blue_yellowf
 ```
 
-### Passo 4: Generazione delle regole ASP
-#### File coinvolto: **`transformer_module.py`**
- 1. Vengono generate le regole ASP per modellare le relazioni logiche fra i fatti
- 2. Come da esempio:
+### Step 4: Generation of ASP Rules
+#### File Involved: **`transformer_module.py`**
+1. ASP rules are generated to model logical relationships between facts.
+2. Example rules:
 - **`{red}`**:
   ```
    red:- redf.
@@ -163,11 +161,11 @@ Nessun segmento non valido.
    blue_yellow:- not redf, not bluef.
   ```
 
-3. Si creano le regole combinate:
+3. Combined rules are created:
 ```
    blue;yellow:- blue_yellow.
 ```
-#### Output Intermedio:
+#### Intermediate Output:
 ```
 red:- redf.
 blue:- not redf, bluef.
@@ -175,7 +173,7 @@ blue_yellow:- not redf, not bluef.
 blue;yellow:- blue_yellow.
 ```
 
-### Passo 5: Output finale:
+### Passo 5: Final Output:
 
 ```
 Output riga 1:
@@ -188,7 +186,7 @@ blue_yellow:- not redf, not bluef.
 blue;yellow:- blue_yellow.
 ```
 
-## Esempi di Input e Output
+## Examples of Input and Output
 ### Input:
 
  ```
