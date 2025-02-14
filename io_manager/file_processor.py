@@ -13,8 +13,11 @@ class FileProcessor:
     def process(self):
         results = []  # serve per accumulare i risultati trasformati e messaggi di errore
 
+        import os
 
-        with open(self.input_file, "r", encoding="utf-8") as fin: #lettura file
+        input_path = os.path.join(os.path.dirname(__file__), "..", self.input_file)
+        with open(input_path, "r", encoding="utf-8") as fin:
+
             for idx, line in enumerate(fin, start=1):
                 original_line = line.strip().replace(' ', '')  #elimina spazi
                 if not original_line:

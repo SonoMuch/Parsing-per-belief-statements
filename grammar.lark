@@ -1,21 +1,22 @@
-?start: assignment_list
-assignment_list: assignment (";" assignment)*
-assignment: "{" fact_list "}" ":" FLOAT "."
+?start: assignment_list | alternative_syntax_list
+
+assignment_list: assignment (";" assignment)* "."
+alternative_syntax_list: alternative_syntax (";" alternative_syntax)* "."
+
+assignment: "{" fact_list "}" ":" FLOAT
+
+alternative_syntax: mass_statement | label_statement | leaf_statement
+
+mass_statement: "mass(" fact "," FLOAT ")"
+label_statement: "label(" fact "," "{" fact_list "}" ")"
+leaf_statement: "leaf(" fact ")"
+
 fact_list: fact ("," fact)*
-?fact: atom ("(" argument_list ")")?
+fact: NAME | NAME "(" argument_list ")"
 argument_list: fact ("," fact)*
 
-atom: NAME | INT
+NAME: /[a-zA-Z_][a-zA-Z0-9_]*/
+FLOAT: /0\.\d+|1\.0|0|1/
 
-NAME: LETTER (LETTER_OR_DIGIT)*
-INT: DIGIT+
-
-FLOAT: DIGIT+ ("." DIGIT+)?
-
-LETTER: /[a-zA-Z]/
-DIGIT: /[0-9]/
-LETTER_OR_DIGIT: LETTER|DIGIT
-
-%ignore " "
-%ignore "\t"
-%ignore "\n"
+%import common.WS
+%ignore WS
