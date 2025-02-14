@@ -10,6 +10,7 @@ class FileProcessor:
         self.parser = BeliefParser()
         self.asp_transformer = ASPTransformer()
 
+
     def process(self):
         results = []  # serve per accumulare i risultati trasformati e messaggi di errore
 

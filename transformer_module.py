@@ -18,6 +18,7 @@ class ASPTransformer:
         self.remaining_probability = 1.0
         facts = []
 
+
         for assignment in assignments:
             if self.remaining_probability <= 0:  # Probabilità residua <= 0
                 facts.append("% Errore: la probabilità residua è zero o negativa.")

@@ -17,6 +17,7 @@ class AssignmentTransformer(Transformer):
             args = items[1]
             return Fact(name, args)
 
+
     def argument_list(self, items):
         return items
 
