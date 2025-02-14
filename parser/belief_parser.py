@@ -13,7 +13,6 @@ class BeliefParser:
             grammar = f.read()
         self.parser = Lark(grammar, parser='lalr', maybe_placeholders=False, transformer=AssignmentTransformer())
 
-
     def parse_line(self, line):
         try:
             print(

@@ -15,7 +15,6 @@ class AssignmentTransformer(Transformer):
             print(f"DEBUG: Invalid FLOAT value: {v}") #Utilizzato per verificare errori
             return None
 
-
     def NAME(self, v): #convesione in stringa
         return str(v)
 

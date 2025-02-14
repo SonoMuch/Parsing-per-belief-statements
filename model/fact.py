@@ -12,7 +12,6 @@ class Fact:
         else:
             return self.name  #return solo il nome (caso no argomenti)
 
-
     def to_normalized_str(self):
         if self.arguments:
             args_normalized = "_".join(arg.to_normalized_str() for arg in self.arguments)  # Normalizza
